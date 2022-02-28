@@ -1,0 +1,51 @@
+{% extends 'homebase.html.twig' %}
+{% block title %}{% endblock %}
+{% block keywords%}{% endblock %}
+{% block description%}{% endblock %}
+{% block body %}
+
+	<!--=== page-title-section start ===-->
+	<section class="title-hero-bg login-cover-bg" data-stellar-background-ratio="0.2">
+		<div class="table-display">
+			<div class="login v-align text-center">
+				<div class="signup-box">
+					<div id="signup-content" class="tab-content">
+						<div id="login" class="tab-pane fade in active">
+							<!--=== Form ===-->
+							<form method="post" class="form login_type text-center">
+								{% if error %}
+									<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+								{% endif %}
+
+								{% if app.user %}
+								<div class="mb-3">
+									You are logged in as
+									{{ app.user.username }},
+									<a href="{{ path('app_logout') }}">Logout</a>
+								</div>
+
+								{% else %}
+
+								<!--=== Username ===-->
+								< <input type="email" class="form-control mb-20" value="{{ last_username }}" name="email" id="email1" placeholder="Email" required autofocus>
+								<!--=== Password ===-->
+								<input type="password" class="form-control mb-20" name="password" id="inputPassword" placeholder="Password"  required>
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+								<!--=== Submit ===-->
+								<button type="submit" name="login" class="btn btn-color btn-circle full-width">LOGIN</button>
+								<!--=== Signup Text ===-->
+								<h6 class="mt-20 gray-light"> DON'T HAVE AN ACCOUNT? </h6>
+								<!--=== Signup Button ===-->
+								<a href="registeruser">SIGN UP <i class="fa fa-angle-double-right"></i> </a>
+							</form>
+							{% endif %}
+							<!--=== End Form ===-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--=== page-title-section end ===-->
+
+{% endblock %}
