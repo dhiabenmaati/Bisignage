@@ -21,7 +21,7 @@ security:
         
             logout:
                 path: app_logout
-                target: login_user
+                target: home
             guard:
                 authenticators:
                     - App\Security\AppCustomAuthenticator

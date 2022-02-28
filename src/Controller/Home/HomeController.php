@@ -5,6 +5,7 @@ namespace App\Controller\Home;
 use App\Entity\Admin\Messages;
 use App\Entity\Admin\Product;
 use App\Form\Admin\MessagesType;
+use App\Form\ContactType;
 use App\Repository\Admin\CommentRepository;
 use App\Repository\Admin\ImageRepository;
 use App\Repository\Admin\ProductRepository;
@@ -30,9 +31,27 @@ class HomeController extends AbstractController
     /**
      * @Route("/contact-us", name="contact")
      */
-    public function contact( SettingRepository $settingRepository)
+    public function contactus(Request $request,\Swift_Mailer $mailer): Response
     {
-        return $this->render('home/contact.html.twig');
+        $form= $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $contact = $form->getData();
+            $message = (new \Swift_Message('Nouveau Contact'))
+                ->setFrom($contact['email'])
+                ->setTo('pisquad.piart@gmail.com')
+                ->setBody(
+                    $this->renderView(
+                        'email/contact.html.twig', compact('contact')
+                    ),'text/html'
+                );
+            $mailer->send($message);
+            $this->addFlash('message','Le message a bien été envoyé');
+        }
+        return $this->render('home/contact.html.twig', [
+            'contactForm' => $form->createView()
+        ]);
     }
 
     /**

@@ -164,6 +164,17 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index');
     }
 
+    // paypal payment
+    /**
+     * @Route("/payment", name="user_payment", methods={"GET"})
+     */
+    public function payment(): Response
+    {
+        return $this->render('user/payment.html.twig');
+    }
+
+
+
     /**
      * @return string
      */

@@ -16,6 +16,11 @@
 	</section>
 	<!--=== page-title-section end ===-->
 
+	{% for message in app.flashes('message') %}
+		<div class="alert alert-success" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
 	<!--=== Contact Us Start ======-->
 	<section class="contact-us white-bg" id="contact">
 		<div class="container">
@@ -23,30 +28,25 @@
 				<div class="col-about-left col-md-6 text-left">
 					<h2 class="merriweather-font">Get in Touch</h2>
 					<h4 class="text-uppercase source-font">Find your brand's voice</h4>
-					<form name="contact-form" id="contact-form" action="php/contact.php" method="POST" class="mt-50">
+					{{ form_start(contactForm,  {'attr': {'class': 'mt-50'}}) }}
 						<div class="messages"></div>
 						<div class="form-group">
 							<label class="sr-only" for="name">Name</label>
-							<input type="text" name="name" class="form-control" id="name" required="required" placeholder="Your Name" data-error="Your Name is Required">
+							{{ form_row(contactForm.nom, {'attr': {'class': 'form-control'}})  }}
 							<div class="help-block with-errors mt-20"></div>
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="email">Email</label>
-							<input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required="required" data-error="Please Enter Valid Email">
-							<div class="help-block with-errors mt-20"></div>
-						</div>
-						<div class="form-group">
-							<label class="sr-only" for="phone">Your Phone</label>
-							<input type="phone" name="phone" class="form-control" id="phone" placeholder="Your Phone">
+							{{ form_row(contactForm.email,  {'attr': {'class': 'form-control'}}) }}
 							<div class="help-block with-errors mt-20"></div>
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="message">Message</label>
-							<textarea name="message" class="form-control" id="message" rows="7" placeholder="Your Message" required data-error="Please, Leave us a message"></textarea>
+							{{ form_row(contactForm.message ,  {'attr': {'class': 'form-control'}}) }}
 							<div class="help-block with-errors mt-20"></div>
 						</div>
-						<button type="submit" name="submit" class="btn btn-color btn-circle">Send Message</button>
-					</form>
+					{{ form_row(contactForm.envoyer, {'attr': {'class': 'btn btn-color btn-circle'}}) }}
+					{{ form_end(contactForm,  {'attr': {'class': 'mt-50'}}) }}
 				</div>
 			</div>
 		</div>
