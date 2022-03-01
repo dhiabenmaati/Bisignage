@@ -1,0 +1,38 @@
+{% extends 'adminbase.html.twig' %}
+
+
+
+{%  block body   %}
+
+    <body>
+
+
+    <h1>Réponse </h1>
+
+    <div class="aside" align="center">
+
+
+        <form action="#" method="post">
+            {{ form_start(form) }}
+
+            <div class="col-sm-12" >
+                {{ form_label(form.Message, 'Message') }}<br />
+
+                <div class='form-input' >
+                    {{ form_widget(form.Message) }}
+                    {{ form_errors(form.Message) }}
+                </div>
+            </div>
+
+            <div>
+
+
+                {{ form_end(form) }}
+        </form>
+    </div>
+
+    </div>
+    </body>
+
+{% endblock %}
+
