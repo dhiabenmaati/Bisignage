@@ -2,20 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Admin\Comment;
-use App\Entity\Admin\Shopping;
+
 use App\Entity\Admin\User;
 use App\Entity\Advertisment;
-use App\Form\Admin\CommentType;
-use App\Form\Admin\ShoppingType;
 use App\Form\AdvertismentType;
 use App\Form\User1Type;
 use App\Form\UserType;
-use App\Repository\Admin\CommentRepository;
-use App\Repository\Admin\ProductRepository;
-use App\Repository\Admin\ShoppingRepository;
 use App\Repository\AdvertismentRepository;
 use App\Repository\UserRepository;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -299,6 +295,44 @@ class UserController extends AbstractController
     }
 
 
+    // generate facture
+    /**
+     * @Route("/facture", name="user_listPdf", methods={"GET"})
+     */
+    public function listUserPDF()
+    {
+        $old_sold = (50 + $this->getUser()->getSold()) ;
+        $current_id = $this->getUser()->getId();
+
+        // dirty update sold
+        $sql = " UPDATE User SET sold = $old_sold WHERE id = $current_id ";
+        $em = $this->getDoctrine()->getManager();
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        $users = $this->getDoctrine()
+            ->getRepository(User    ::class)
+            ->findAll();
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('user/facture.html.twig', [
+            'users' => $users,
+        ]);
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A3', 'portrait');
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => true
+        ]);
+    }
 
     /**
      * @return string

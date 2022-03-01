@@ -65,6 +65,27 @@ class User implements UserInterface
      */
     private $updated_at;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $sold;
+
+    /**
+     * @return mixed
+     */
+    public function getSold()
+    {
+        return $this->sold;
+    }
+
+    /**
+     * @param mixed $sold
+     */
+    public function setSold($sold): void
+    {
+        $this->sold = $sold;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
